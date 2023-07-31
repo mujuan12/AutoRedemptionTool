@@ -1,0 +1,18 @@
+name: Scheduled Task
+
+on:
+  schedule:
+    # 设置定时执行的时间
+    - cron: '0 * * * *'  # 每小时执行一次
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run task
+        run: python main.py
+          # 在这里写入您希望执行的命令或脚本
