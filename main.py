@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote
 import json
 import os
+# -*- coding: utf-8 -*-
 
 os.system('chcp 65001')
 
