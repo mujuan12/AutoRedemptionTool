@@ -2,10 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import quote
 import json
-import os
 # -*- coding: utf-8 -*-
 
-os.system('chcp 65001')
 
 giftCodeUrl = "http://statistics.pandadastudio.com/player/giftCodeView"
 infoUrl = r"E:\Microsoft Edge Downloads\uid.url"
