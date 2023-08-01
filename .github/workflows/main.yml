@@ -3,7 +3,7 @@ name: Scheduled Task
 on:
   schedule:
     # 设置定时执行的时间
-    - cron: '0 * * * *'  # 每小时执行一次
+    - cron: '0 11 * * *'  # 每小时执行一次
   workflow_dispatch:
 
 jobs:
