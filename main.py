@@ -58,10 +58,10 @@ def reward():
     dhms = Open('dhm.txt')
 
     for uid in uids:
-        print(f"昵称：{uid[0].encode('utf-8')}")
+        print(f"昵称：{uid[0]}")
         for dhm in dhms:
             res = simulate_submit_event(uid=uid[1], dhm=dhm)
-            print(f'\t·兑换码:{dhm.encode("utf-8")}，状态:{res}')
+            print(f'\t·兑换码:{dhm}，状态:{res}')
 
 
 reward()
