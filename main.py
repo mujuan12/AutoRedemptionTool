@@ -48,6 +48,8 @@ def Open(filename):
     with open(filename, 'r', encoding='UTF-8') as file:
         lines = file.readlines()
         for line in lines:
+            if line.isspace():
+                continue
             line = line.strip()
             if ' ' in line:
                 elements = line.split(' ')
@@ -77,8 +79,8 @@ def reward():
             res = simulate_submit_event(uid=uid[1], dhm=dhm)
             time.sleep(0.3)
 
-            if res['code'] != 425:
-                status.append(f'兑换码:{dhm}\n\n\t\t状态:{res["msg"]}')
+            #if res['code'] != 425:
+            status.append(f'兑换码:{dhm}\n\n\t\t状态:{res["msg"]}')
             print(f'\t·兑换码:{dhm}，状态:{res}')
         for dhm in dhms_limited:
             res = simulate_submit_event(uid=uid[1], dhm=dhm)
@@ -88,7 +90,8 @@ def reward():
             print(f'\t·兑换码:{dhm}，状态:{res}')
         for stat in status:
             tmp = tmp + "\t{}\n\n".format(stat)
-            msg = msg + tmp
+
+        msg = msg + tmp
 
         modifyUidIsRewardLongDhm(uid=uid[1])
 
