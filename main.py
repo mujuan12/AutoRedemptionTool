@@ -76,10 +76,10 @@ def reward():
             res = simulate_submit_event(uid=uid[1], dhm=dhm)
 
             if flag:
-                status.append(f'兑换码:{dhm},\n\n状态:{res}')
+                status.append(f'兑换码:{dhm}\n\n\t状态:{res}')
             else:
                 if res['code'] != 425:
-                    status.append(f'兑换码:{dhm}，\n\n状态:{res}')
+                    status.append(f'兑换码:{dhm}\n\n\t状态:{res}')
             print(f'\t·兑换码:{dhm}，状态:{res}')
         for stat in status:
             tmp = tmp + "\t{}\n\n".format(stat)
@@ -91,7 +91,6 @@ def reward():
 def sendMsg(data):
     notifyToken = "SCT218479TQMHt4Eig5ZIuhFRk8h8jOOyj"
     url = "https://sctapi.ftqq.com/{}.send"
-
 
     body = {
         "title": "⏰ 兑换结果通知",
