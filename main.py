@@ -124,5 +124,5 @@ def modifyUidIsRewardLongDhm(uid):
 
 
 data = reward()
-#sendMsg(data=data)
+sendMsg(data=data)
 #getUid()
