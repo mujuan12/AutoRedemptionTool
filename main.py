@@ -8,27 +8,37 @@ import json
 
 
 giftCodeUrl = "http://statistics.pandadastudio.com/player/giftCodeView"
-infoUrl = r"E:\Microsoft Edge Downloads\uid.url"
+baseInfoUrl = r"http://82.157.236.56:8080/info/"
 rewardUrl = "http://statistics_1.pandadastudio.com/player/giftCode"
 
 
-def getUid():
-    response = requests.get(infoUrl)
-    soup = BeautifulSoup(response.text, "html.parser")
-    infoList = soup.find('textarea')
-    # print(response.text)
-    if "可可姐" in response.text:
-        print(1111111)
-    print(infoList)
+def getInfo(fileName):
+    info_path = baseInfoUrl+fileName
+    res = requests.get(url=info_path)
+
+    soup = BeautifulSoup(res.text,'html.parser')
+    p_tags = soup.find_all("p")
+    lines = []
+    info_list = []
+    for p in p_tags:
+        lines.append(p.text)
+
+    for line in lines:
+        if line.isspace():
+            continue
+        line = line.strip()
+        if ' ' in line:
+            elements = line.split(' ')
+            if len(elements) == 3:
+                info_list.append((elements[0], elements[1], elements[2]))
+        else:
+            info_list.append(line)
+    return info_list
 
 
 def simulate_submit_event(uid, dhm):
     url = "http://statistics.pandadastudio.com/player/giftCode" if len(
         uid) != 12 else "http://statistics_1.pandadastudio.com/player/giftCode"
-
-    # 将中文转换为 URL 编码
-    # url_encoded_text = quote(dhm)
-    # url_encoded_text = dhm
 
     payload = {
         'uid': uid,
@@ -39,7 +49,6 @@ def simulate_submit_event(uid, dhm):
     response = requests.post(newurl, data=payload)
     if response is None:
         print("空")
-    print(response.text)
     return response.json()
 
 
@@ -60,11 +69,10 @@ def Open(filename):
     file.close()
     return data_list
 
-
 def reward():
-    uids = Open('uid.txt')
-    dhms_LongTime = Open('dhm_LongTime')
-    dhms_limited = Open('dhm_limited')
+    uids = getInfo("uid")
+    dhms_LongTime = getInfo("dhm_LongTime")
+    dhms_limited = getInfo('dhm_limited')
 
     data = {}
     msg = ""
@@ -109,31 +117,12 @@ def sendMsg(data):
     requests.post(url.format(notifyToken), data=body)
     print("消息已通过 Serverchan-Turbo 推送，请检查推送结果")
 
-
+# 修改兑换完长期兑换码的用户的标志位 true
 def modifyUidIsRewardLongDhm(uid):
-    with open('uid.txt', 'r+', encoding='utf-8') as file:
-        # 读取文件的每一行
-        lines = file.readlines()
-
-        # 遍历每一行
-        for i, line in enumerate(lines):
-            # 判断是否是指定的行
-            if uid in line:
-                # 在该行的末尾追加数据
-                index = line.find(' ', line.find(' ') + 1)
-                new_line = line[:index]
-                new_line += ' true\n'
-                # 将修改后的行写回文件
-                lines[i] = new_line
-                break
-
-        # 将修改后的内容写回文件
-        file.seek(0)
-        file.writelines(lines)
-
-        # 关闭文件
-        file.close()
+    modify_path = 'http://82.157.236.56:8080/' + uid
+    requests.get(modify_path)
 
 
 data = reward()
-sendMsg(data=data)
+#sendMsg(data=data)
+#getUid()
