@@ -9,7 +9,7 @@ import json
 
 giftCodeUrl = "http://statistics.pandadastudio.com/player/giftCodeView"
 baseInfoUrl = r"http://82.157.236.56:8080/info/"
-baseDeleteDhmUrl = "http://82.157.236.56:8080/dhm/delete?dhm='五周年盛典火热进行中'"
+baseDeleteDhmUrl = "http://82.157.236.56:8080/dhm/delete/"
 rewardUrl = "http://statistics_1.pandadastudio.com/player/giftCode"
 
 
@@ -50,10 +50,6 @@ def simulate_submit_event(uid, dhm):
     response = requests.post(newurl, data=payload).json()
     if response is None:
         print("空")
-    # 该兑换码无效或未到时间，删除该兑换码
-    if response['code'] == '424':
-        delete_path = baseDeleteDhmUrl+dhm
-        requests.get(delete_path)
 
     return response
 
@@ -82,6 +78,7 @@ def reward():
 
     data = {}
     msg = ""
+    unUsed_dhm = []
 
     for uid in uids:
         print(f"昵称：{uid[0]}")
@@ -96,18 +93,29 @@ def reward():
             #if res['code'] != 425:
             status.append(f'兑换码:{dhm}\n\n\t\t状态:{res["msg"]}')
             print(f'\t·兑换码:{dhm}，状态:{res}')
+
         for dhm in dhms_limited:
             res = simulate_submit_event(uid=uid[1], dhm=dhm)
             time.sleep(0.3)
 
             status.append(f'兑换码:{dhm}\n\n\t\t状态:{res["msg"]}')
             print(f'\t·兑换码:{dhm}，状态:{res}')
+
+            if res['code'] == 424:
+                unUsed_dhm.append(dhm)
+                dhms_limited.remove(dhm)
+
         for stat in status:
             tmp = tmp + "\t{}\n\n".format(stat)
 
         msg = msg + tmp
 
         modifyUidIsRewardLongDhm(uid=uid[1])
+
+    for dhm in unUsed_dhm:
+        # 该兑换码无效或未到时间，删除该兑换码
+        delete_path = baseDeleteDhmUrl + dhm
+        requests.get(delete_path)
 
     return msg
 
