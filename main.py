@@ -9,6 +9,7 @@ import json
 
 giftCodeUrl = "http://statistics.pandadastudio.com/player/giftCodeView"
 baseInfoUrl = r"http://82.157.236.56:8080/info/"
+baseDeleteDhmUrl = "http://82.157.236.56:8080/dhm/delete?dhm='五周年盛典火热进行中'"
 rewardUrl = "http://statistics_1.pandadastudio.com/player/giftCode"
 
 
@@ -46,10 +47,15 @@ def simulate_submit_event(uid, dhm):
         'token': 0
     }
     newurl = url + "?uid=" + uid + "&code=" + dhm
-    response = requests.post(newurl, data=payload)
+    response = requests.post(newurl, data=payload).json()
     if response is None:
         print("空")
-    return response.json()
+    # 该兑换码无效或未到时间，删除该兑换码
+    if response['code'] == '424':
+        delete_path = baseDeleteDhmUrl+dhm
+        requests.get(delete_path)
+
+    return response
 
 
 def Open(filename):
