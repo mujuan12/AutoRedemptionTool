@@ -8,8 +8,8 @@ import json
 
 
 giftCodeUrl = "http://statistics.pandadastudio.com/player/giftCodeView"
-baseInfoUrl = r"http://www.dogzi/info/"
-baseDeleteDhmUrl = "http://www.dogzi/dhm/delete/"
+baseInfoUrl = r"http://82.157.236.56:80/info/"
+baseDeleteDhmUrl = "http://82.157.236.56:80/dhm/delete/"
 rewardUrl = "http://statistics_1.pandadastudio.com/player/giftCode"
 
 
