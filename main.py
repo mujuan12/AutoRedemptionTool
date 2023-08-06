@@ -76,11 +76,12 @@ def reward():
     dhms_LongTime = getInfo("dhm_LongTime")
     dhms_limited = getInfo('dhm_limited')
 
-    data = {}
     msg = ""
     unUsed_dhm = []
 
     for uid in uids:
+        if uid == "":
+            continue
         print(f"昵称：{uid[0]}")
         status = []
         tmp = "### {}\n\n".format(uid[0])
@@ -90,12 +91,10 @@ def reward():
             res = simulate_submit_event(uid=uid[1], dhm=dhm)
             time.sleep(0.3)
 
-            #if res['code'] != 425:
             status.append(f'兑换码:{dhm}\n\n\t\t状态:{res["msg"]}')
             print(f'\t·兑换码:{dhm}，状态:{res}')
 
             if res['code'] != 425 and res['code'] != 0:
-                print(1)
                 unUsed_dhm.append(dhm)
                 dhms_LongTime.remove(dhm)
 
@@ -119,6 +118,7 @@ def reward():
 
         for dhm in unUsed_dhm:
             # 该兑换码无效或未到时间，删除该兑换码
+            print(1)
             delete_path = baseDeleteDhmUrl + dhm
             requests.get(delete_path)
             unUsed_dhm.remove(dhm)
